@@ -5,7 +5,7 @@ show_help() {
         ;;
     *)
         [[ $1 ]] && warn "未知选项 '$1'"
-        msg "$is_core_name script $is_sh_ver by $author"
+        msg "$is_core_name script $is_sh_ver"
         msg "Usage: $is_core [options]... [args]... "
         msg
         help_info=(
