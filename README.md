@@ -88,6 +88,7 @@ Usage: sing-box [options]... [args]...
    fix-caddyfile                                   修复 Caddyfile
    fix-config.json                                 修复 config.json
    import                                          导入 sing-box/v2ray 脚本配置
+   hop [name]                                      为 Hysteria2 添加端口跳跃 (20000-50000/udp)
 
 管理:
    un, uninstall                                   卸载

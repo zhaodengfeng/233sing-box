@@ -39,6 +39,7 @@ mainmenu=(
     "删除配置"
     "运行管理"
     "更新"
+    "添加端口跳跃"
     "卸载"
     "帮助"
     "其他"
@@ -1521,14 +1522,18 @@ is_main_menu() {
         update $REPLY
         ;;
     7)
-        uninstall
+        load hop.sh
+        hop_apply
         ;;
     8)
+        uninstall
+        ;;
+    9)
         msg
         load help.sh
         show_help
         ;;
-    9)
+    10)
         ask list is_do_other "启用BBR 查看日志 测试运行 重装脚本 设置DNS"
         case $REPLY in
         1)
@@ -1551,7 +1556,7 @@ is_main_menu() {
             ;;
         esac
         ;;
-    10)
+    11)
         load help.sh
         about
         ;;
@@ -1705,6 +1710,10 @@ main() {
     h | help | --help)
         load help.sh
         show_help ${@:2}
+        ;;
+    hop)
+        load hop.sh
+        hop_apply $2
         ;;
     *)
         is_try_change=1
