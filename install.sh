@@ -429,8 +429,9 @@ main() {
     mkdir -p $is_conf_dir
 
     load core.sh
-    # create a reality config
-    add reality
+    clear
+    msg ok "安装完成，请选择需要添加的协议。"
+    is_main_menu
     # remove tmp dir and exit.
     exit_and_del_tmpdir ok
 }
