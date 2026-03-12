@@ -94,6 +94,7 @@ is_caddy_conf=$is_caddy_dir/$author
 is_caddy_service=$(systemctl list-units --full -all | grep caddy.service)
 is_http_port=80
 is_https_port=443
+is_acme_dir=/root/.local/share/certmagic/certificates/acme-v02.api.letsencrypt.org-directory
 
 # core ver
 is_core_ver=$($is_core_bin version | head -n1 | cut -d " " -f3)

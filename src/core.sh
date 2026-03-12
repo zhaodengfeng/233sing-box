@@ -1123,7 +1123,14 @@ get() {
             is_protocol=$net
             [[ ! $password ]] && password=$uuid
             if [[ $host ]]; then
-                json_str="users:[{password:\"$password\"}],tls:{enabled:true,server_name:\"$host\",acme:{domain:\"$host\"}}"
+                is_acme_cert_dir=$is_acme_dir/$host
+                is_acme_cert=$is_acme_cert_dir/$host.crt
+                is_acme_key=$is_acme_cert_dir/$host.key
+                if [[ -f $is_acme_cert && -f $is_acme_key ]]; then
+                    json_str="users:[{password:\"$password\"}],tls:{enabled:true,server_name:\"$host\",certificate_path:\"$is_acme_cert\",key_path:\"$is_acme_key\"}"
+                else
+                    json_str="users:[{password:\"$password\"}],tls:{enabled:true,server_name:\"$host\",acme:{domain:\"$host\"}}"
+                fi
             else
                 json_str="users:[{password:\"$password\"}],$is_tls_json"
             fi

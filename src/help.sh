@@ -16,7 +16,7 @@ show_help() {
             "   get-port                                        返回一个可用的端口"
             "   ss2022                                          返回一个可用于 Shadowsocks 2022 的密码\n"
             "一般:"
-            "   a, add [protocol] [args... | auto]              添加配置 (Hysteria2 可选域名 + ACME 证书)"
+            "   a, add [protocol] [args... | auto]              添加配置 (Hysteria2 可选域名 + 优先复用现有证书)"
             "   c, change [name] [option] [args... | auto]      更改配置"
             "   d, del [name]                                   删除配置**"
             "   i, info [name]                                  查看配置"
