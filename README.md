@@ -44,6 +44,12 @@
 
 安装及使用：https://233boy.com/sing-box/sing-box-script/
 
+# 安装命令
+
+```bash
+bash <(curl -fsSL https://raw.githubusercontent.com/zhaodengfeng/233sing-box/main/install.sh)
+```
+
 # 帮助
 
 使用：`sing-box help`
@@ -110,6 +116,6 @@ Usage: sing-box [options]... [args]...
    h, help                                         显示此帮助界面
 
 谨慎使用 del, ddel, 此选项会直接删除配置; 无需确认
-反馈问题) https://github.com/233boy/sing-box/issues
+反馈问题) https://github.com/zhaodengfeng/233sing-box/issues
 文档(doc) https://233boy.com/sing-box/sing-box-script/
 ```
