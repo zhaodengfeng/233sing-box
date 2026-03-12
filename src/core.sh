@@ -927,6 +927,12 @@ add() {
         [[ $is_use_socks_pass ]] && is_socks_pass=$is_use_socks_pass
     fi
 
+    if [[ ${is_new_protocol,,} =~ hysteria2 && $is_main_start && ! $host ]]; then
+        echo -ne "请输入域名 (留空则使用自生成证书):"
+        read host
+        [[ $host ]] && get host-test
+    fi
+
     if [[ $is_use_tls ]]; then
         if [[ ! $is_no_auto_tls && ! $is_caddy && ! $is_gen && ! $is_dont_test_host ]]; then
             # test auto tls
@@ -1116,7 +1122,11 @@ get() {
             net=hysteria2
             is_protocol=$net
             [[ ! $password ]] && password=$uuid
-            json_str="users:[{password:\"$password\"}],$is_tls_json"
+            if [[ $host ]]; then
+                json_str="users:[{password:\"$password\"}],tls:{enabled:true,server_name:\"$host\",acme:{domain:\"$host\"}}"
+            else
+                json_str="users:[{password:\"$password\"}],$is_tls_json"
+            fi
             ;;
         shadowsocks*)
             net=ss
@@ -1330,8 +1340,14 @@ info() {
     hy*)
         is_can_change=(0 1 4)
         is_info_show=(0 1 2 10 8 9 20)
-        is_url="$is_protocol://$password@$is_addr:$port?alpn=h3&insecure=1#233boy-$net-$is_addr"
-        is_info_str=($is_protocol $is_addr $port $password tls h3 true)
+        if [[ $is_servername ]]; then
+            is_addr=$is_servername
+            is_url="$is_protocol://$password@$is_addr:$port?alpn=h3#233boy-$net-$is_addr"
+            is_info_str=($is_protocol $is_addr $port $password tls h3 false)
+        else
+            is_url="$is_protocol://$password@$is_addr:$port?alpn=h3&insecure=1#233boy-$net-$is_addr"
+            is_info_str=($is_protocol $is_addr $port $password tls h3 true)
+        fi
         ;;
     tuic)
         is_insecure=1

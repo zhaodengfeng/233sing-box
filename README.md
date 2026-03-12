@@ -15,7 +15,7 @@
 - 一键添加 VLESS-REALITY (默认)
 - 一键添加 TUIC
 - 一键添加 Trojan
-- 一键添加 Hysteria2
+- 一键添加 Hysteria2（支持可选域名 + ACME 正式证书）
 - 一键添加 Shadowsocks 2022
 - 一键添加 VMess-(TCP/HTTP/QUIC)
 - 一键添加 VMess-(WS/H2/HTTPUpgrade)-TLS
