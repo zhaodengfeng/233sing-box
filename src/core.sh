@@ -1205,12 +1205,12 @@ get() {
         [[ $is_no_auto_tls || $is_gen || $is_dont_test_host ]] && return
         get_ip
         get ping
-        if [[ ! $(grep $ip <<<$is_host_dns) ]]; then
+        if [[ ! $(grep -F "$ip" <<<$is_host_dns) ]]; then
             msg "\n请将 ($(_red_bg $host)) 解析到 ($(_red_bg $ip))"
             msg "\n如果使用 Cloudflare, 在 DNS 那; 关闭 (Proxy status / 代理状态), 即是 (DNS only / 仅限 DNS)"
             ask string y "我已经确定解析 [y]:"
             get ping
-            if [[ ! $(grep $ip <<<$is_host_dns) ]]; then
+            if [[ ! $(grep -F "$ip" <<<$is_host_dns) ]]; then
                 _cyan "\n测试结果: $is_host_dns"
                 err "域名 ($host) 没有解析到 ($ip)"
             fi
@@ -1224,12 +1224,25 @@ get() {
         fi
         ;;
     ping)
-        # is_ip_type="-4"
-        # [[ $(grep ":" <<<$ip) ]] && is_ip_type="-6"
-        # is_host_dns=$(ping $host $is_ip_type -c 1 -W 2 | head -1)
-        is_dns_type="a"
-        [[ $(grep ":" <<<$ip) ]] && is_dns_type="aaaa"
-        is_host_dns=$(_wget -qO- --header="accept: application/dns-json" "https://one.one.one.one/dns-query?name=$host&type=$is_dns_type")
+        is_host_dns=
+        if [[ $(grep ":" <<<$ip) ]]; then
+            if [[ $(type -P dig) ]]; then
+                is_host_dns=$(dig +short AAAA $host | sed '/^$/d')
+            elif [[ $(type -P host) ]]; then
+                is_host_dns=$(host -t AAAA $host 2>/dev/null | sed -n 's/.* has IPv6 address //p')
+            fi
+        else
+            if [[ $(type -P dig) ]]; then
+                is_host_dns=$(dig +short A $host | sed '/^$/d')
+            elif [[ $(type -P host) ]]; then
+                is_host_dns=$(host -t A $host 2>/dev/null | sed -n 's/.* has address //p')
+            fi
+        fi
+        [[ ! $is_host_dns ]] && {
+            is_dns_type="a"
+            [[ $(grep ":" <<<$ip) ]] && is_dns_type="aaaa"
+            is_host_dns=$(_wget -qO- --header="accept: application/dns-json" "https://one.one.one.one/dns-query?name=$host&type=$is_dns_type")
+        }
         ;;
     install-caddy)
         _green "\n安装 Caddy 实现自动配置 TLS.\n"
